@@ -7,7 +7,7 @@ const TickerSearch = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
 
-  const API_KEY = "0R2H67CB5PHHLBGI"; // Replace with your key
+  const API_KEY = process.env.ALPHA_VANTAGE_API_KEY; // Replace with your key
 
   const searchTicker = async (event: React.FormEvent) => {
     event.preventDefault();
