@@ -7,12 +7,11 @@ const TickerSearch = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null); // Error state
 
-  const API_KEY = process.env.ALPHA_VANTAGE_API_KEY; // Replace with your key
+  const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY; // Replace with your key
 
   const searchTicker = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!query) return;
-
     setLoading(true);
     setError(null);
 
@@ -37,10 +36,36 @@ const TickerSearch = () => {
     }
   };
 
+  // // keyboard event Trigger api call
+  // useEffect(() => {
+  //   const tickerSearch = async (query: string) => {
+  //     try {
+  //       const response = await axios.get(`https://www.alphavantage.co/query`, {
+  //         params: {
+  //           function: "SYMBOL_SEARCH",
+  //           keywords: query,
+  //           apikey: API_KEY,
+  //         },
+  //       });
+
+  //       if (response.data.bestMatches) {
+  //         setResults(response.data.bestMatches);
+  //       } else {
+  //         setResults([]);
+  //       }
+  //     } catch (err) {
+  //       setError("Failed to fetch data. Try again later.");
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   tickerSearch(query);
+  // }, [query, API_KEY]);
+
   return (
     <div>
       <h2>Stock Ticker Search</h2>
-      <form onSubmit={searchTicker}>
+      <form onSubmit={searchTicker}>  
         <input
           type="text"
           placeholder="Enter stock symbol (e.g., AAPL)"

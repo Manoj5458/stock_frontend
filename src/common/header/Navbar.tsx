@@ -8,7 +8,7 @@ const Navbar = () => {
         <div className="container flex mx-auto">
           <div className="w-1/3 flex items-start">
             <a href="/">
-              <img src="/logo192.png" alt="Logo" className="h-8 w-8" />
+              <img src="assets/1.png" alt="Logo" className="h-25 w-50" />
             </a>
           </div>
           <div className="flex items-center justify-end">

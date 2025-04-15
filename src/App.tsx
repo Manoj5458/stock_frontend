@@ -1,10 +1,11 @@
 import React from "react";
 import "./App.css";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Navbar from "./common/Navbar";
+// import Navbar from "./common/header/Navbar";
 import Home from "./pages/Home";
 import Upstox from "./pages/Upstox";
 import TickerSearch from "./components/Ticker";
+import { NavbarMain } from "./common/header/Navbar_Main";
 // import SideNav from "./common/SideNav";
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
     <Router>
       <div>
         <header className="">
-          <Navbar />
+          {/* <Navbar /> */}
+          <NavbarMain />
           {/* <SideNav /> */}
         </header>
         <main className="mt-14">
