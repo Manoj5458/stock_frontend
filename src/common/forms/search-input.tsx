@@ -1,11 +1,16 @@
 "use client";
 
+import { useEffect } from "react";
 import { PlaceholdersAndVanishInput } from "../../components/ui/placeholders-and-vanish-input";
 
 export function SeachInput({
   onSearchChange,
+  onFormSubmit,
+  onResultsChange,
 }: {
   onSearchChange: (value: string) => void;
+  onFormSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  onResultsChange: (results: any) => void;
 }) {
   const placeholders = [
     "Discover trends — search by company or stock symbol…",
@@ -15,13 +20,15 @@ export function SeachInput({
     "Track your favorite stock — start typing…",
   ];
 
+  useEffect(() => {
+    onSearchChange("");
+    onResultsChange([]);
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearchChange(e.target.value);
   };
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("submitted");
-  };
+
   return (
     <div className="w-full flex flex-col justify-center  items-center">
       <h1 className="mb-5 text-xl sm:text-5xl dark:text-white text-black">
@@ -33,7 +40,7 @@ export function SeachInput({
       <PlaceholdersAndVanishInput
         placeholders={placeholders}
         onChange={handleChange}
-        onSubmit={onSubmit}
+        onSubmit={onFormSubmit}
       />
     </div>
   );

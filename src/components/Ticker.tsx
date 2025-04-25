@@ -65,7 +65,7 @@ const TickerSearch = () => {
   return (
     <div>
       <h2>Stock Ticker Search</h2>
-      <form onSubmit={searchTicker}>  
+      <form onSubmit={searchTicker}>
         <input
           type="text"
           placeholder="Enter stock symbol (e.g., AAPL)"

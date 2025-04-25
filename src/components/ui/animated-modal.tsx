@@ -42,9 +42,11 @@ export function Modal({ children }: { children: ReactNode }) {
 export const ModalTrigger = ({
   children,
   className,
+  resetvalue,
 }: {
   children: ReactNode;
   className?: string;
+  resetvalue?: (value: string) => void;
 }) => {
   const { setOpen } = useModal();
   return (
@@ -162,7 +164,7 @@ export const ModalFooter = ({
   return (
     <div
       className={cn(
-        "flex justify-end p-4 bg-gray-100 dark:bg-neutral-900",
+        "flex justify-start text-white p-4 bg-gray-100 dark:bg-neutral-900",
         className
       )}
     >
