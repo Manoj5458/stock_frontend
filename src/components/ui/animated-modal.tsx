@@ -164,7 +164,7 @@ export const ModalFooter = ({
   return (
     <div
       className={cn(
-        "flex justify-start text-white p-4 bg-gray-100 dark:bg-neutral-900",
+        "flex justify-start text-white bg-gray-100 dark:bg-neutral-900",
         className
       )}
     >
