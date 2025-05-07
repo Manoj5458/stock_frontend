@@ -5,6 +5,7 @@ const initialState: StockData = {
     marketCap: "",
     currentPrice: "",
     highPrice: "",
+    lowPrice: "",
     netProfitQuarter: [],
     netProfitYear: []
 };
@@ -22,4 +23,6 @@ const stockDataSlice = createSlice({
     }
 });
 
+export const marketData = (state: { stockData: StockData }) => state.stockData;
 export const { setStockData, clearStockData } = stockDataSlice.actions;
+export default stockDataSlice.reducer;

@@ -1,10 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { ThreeDCardDemo } from "../common/body/card";
+import { useSelector } from "react-redux";
+import { marketData } from "../features/stockData";
 // import Charts from "../components/charts";
 
 const Home = () => {
   const [message, setMessage] = useState("Hello!");
+  const screenerData = useSelector(marketData);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -20,6 +23,10 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log(screenerData);
+  }, [screenerData]);
 
   return (
     <div>
