@@ -7,8 +7,20 @@ import Upstox from "./pages/Upstox";
 import TickerSearch from "./components/Ticker";
 import { NavbarMain } from "./common/header/Navbar_Main";
 // import SideNav from "./common/SideNav";
+import store from "./app/store";
+import { Provider } from "react-redux";
 
 function App() {
+  return (
+    <Provider store={store}>
+      <div className=" dark:bg-gray-800 min-h-screen">
+        <AppContent />
+      </div>
+    </Provider>
+  );
+}
+
+const AppContent = () => {
   return (
     <Router>
       <div>
@@ -27,6 +39,6 @@ function App() {
       </div>
     </Router>
   );
-}
+};
 
 export default App;
