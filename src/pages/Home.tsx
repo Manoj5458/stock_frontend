@@ -1,13 +1,15 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { ThreeDCardDemo } from "../common/body/card";
 import { useSelector } from "react-redux";
 import { marketData } from "../features/stockData";
+import ScreenerUi from "../common/body/screenerUi";
+import Charts from "../components/charts";
 // import Charts from "../components/charts";
 
 const Home = () => {
   const [message, setMessage] = useState("Hello!");
   const screenerData = useSelector(marketData);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,14 +31,13 @@ const Home = () => {
   }, [screenerData]);
 
   return (
-    <div>
+    <div className="grid justify-center">
       <h1>Welcome to Mr_Stocks App</h1>
-      <p>{message}</p>
-      <div className="card w-150 h-100">{/* <Charts /> */}</div>
-      <ThreeDCardDemo />
-      <a href="/ticker" className="btn bg-secondary hover:border-color">
-        Ticket
-      </a>
+      {message}
+      {screenerData.marketCap.length > 0 ? <ScreenerUi /> : <h1>Loading...</h1>}
+      <div className="card w-150 h-100">
+        <Charts />
+      </div>
     </div>
   );
 };

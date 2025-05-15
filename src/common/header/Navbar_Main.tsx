@@ -46,7 +46,10 @@ export function NavbarMain() {
 
           <div className="flex items-center gap-4">
             <SearchModal />
-            <NavbarButton variant="primary">Login with Upstox</NavbarButton>
+
+            <NavbarButton onClick={upstoxLogin} variant="primary">
+              Login with Upstox
+            </NavbarButton>
           </div>
         </NavBody>
 
