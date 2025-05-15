@@ -15,11 +15,12 @@ interface ModalContextType {
   setOpen: (open: boolean) => void;
 }
 
-const ModalContext = createContext<ModalContextType | undefined>(undefined);
+export const ModalContext = createContext<ModalContextType | undefined>(
+  undefined
+);
 
 export const ModalProvider = ({ children }: { children: ReactNode }) => {
   const [open, setOpen] = useState(false);
-
   return (
     <ModalContext.Provider value={{ open, setOpen }}>
       {children}
@@ -36,7 +37,7 @@ export const useModal = () => {
 };
 
 export function Modal({ children }: { children: ReactNode }) {
-  return <ModalProvider>{children}</ModalProvider>;
+  return <>{children}</>;
 }
 
 export const ModalTrigger = ({
@@ -157,9 +158,11 @@ export const ModalContent = ({
 export const ModalFooter = ({
   children,
   className,
+  setOpen,
 }: {
   children: ReactNode;
   className?: string;
+  setOpen?: (open: boolean) => void;
 }) => {
   return (
     <div

@@ -28,7 +28,7 @@ const Upstox = () => {
   const accessToken = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/upstox/getAccessToken",
+        "http://localhost:8000/upstox/get_access_token",
         {
           method: "GET",
           headers: {

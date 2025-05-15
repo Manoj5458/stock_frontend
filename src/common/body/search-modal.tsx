@@ -5,6 +5,7 @@ import {
   ModalContent,
   ModalFooter,
   ModalTrigger,
+  useModal,
 } from "../../components/ui/animated-modal";
 import { SignupFormDemo } from "./signUpForm";
 import { SeachInput } from "../forms/search-input";
@@ -15,16 +16,16 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/src/app/store";
 import StockData from "@/src/models/stock-model";
 import { setStockData } from "../../features/stockData";
+import mapToStockData from "../../utils/mapScreenerData_service";
 
 export function SearchModal() {
   const [results, setResults] = useState([]); // Search results
-  // const [loading, setLoading] = useState(false); // Loading state
-  // const [error, setError] = useState<string | null>(null); // Error state
   const [searchValue, setSearchValue] = useState("");
   const [screenerData, setScreenerData] = useState<StockData>(); // Stock data
   const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY;
   const [csrfToken, setCsrfToken] = useState("");
   const dispatch = useDispatch<AppDispatch>();
+  const { setOpen } = useModal();
 
   // Fetch CSRF token from the server
   useEffect(() => {
@@ -89,11 +90,12 @@ export function SearchModal() {
   };
 
   const onTickerSearch = async (searchValue: string) => {
+    const trimmedSearchValue = searchValue.replace(/\.(BSE|NSE|MCX)$/i, "");
     try {
       const response = await axios.post(
         `http://localhost:8000/upstox/screener`,
         {
-          searchValue,
+          searchValue: trimmedSearchValue,
         },
         {
           headers: {
@@ -104,23 +106,11 @@ export function SearchModal() {
       );
       if (response.data) {
         setScreenerData(response.data);
+        setOpen(false);
       }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      throw new Error("Failed to fetch data. Try again later.");
+      console.error("Error fetching data:", err);
     }
-  };
-
-  const mapToStockData = (data: any): StockData => {
-    const [high, low] = data["High / Low"].split(" / ");
-    return {
-      marketCap: data["Market Cap"],
-      currentPrice: data["Current Price"],
-      highPrice: high.trim(), // you could also keep both high and low if needed
-      lowPrice: low.trim(),
-      netProfitQuarter: data["Net Profit Quarterly"],
-      netProfitYear: data["Net Profit Yearly"],
-    };
   };
 
   useEffect(() => {
@@ -179,7 +169,7 @@ export function SearchModal() {
             </div>
           </ModalContent>
           {searchValue && (
-            <ModalFooter className="gap-4">
+            <ModalFooter className="gap-4" setOpen={setOpen}>
               <div className="text-white p-4 text-xl ml-1 w-full">
                 <ul>
                   {results.map((stock, index) => (
@@ -188,7 +178,6 @@ export function SearchModal() {
                       className="hover:border-solid hover:border-2 hover:border-sky-500 hover:bg-sky-950 w-full"
                     >
                       <button
-                        // href={`https://www.screener.in/company/${stock["1. symbol"]}/consolidated/`}
                         className="text-start hover:text-purple-600 hover:ps-1 w-full"
                         onClick={() => onTickerSearch(stock["1. symbol"])} // Call the function with the stock symbol
                       >

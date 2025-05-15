@@ -2,12 +2,21 @@ import { createSlice } from "@reduxjs/toolkit";
 import StockData from "../models/stock-model";
 
 const initialState: StockData = {
+    companyName: "",
+    about: "",
     marketCap: "",
     currentPrice: "",
     highPrice: "",
     lowPrice: "",
+    bookValue: "",
+    dividendYield: "",
+    roe: "",
+    roce: "",
+    faceValue: "",
+    pe: "",
     netProfitQuarter: [],
-    netProfitYear: []
+    netProfitYear: [],
+    stockScore: 0
 };
 
 const stockDataSlice = createSlice({
