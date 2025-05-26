@@ -4,7 +4,6 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 // import Navbar from "./common/header/Navbar";
 import Home from "./pages/Home";
 import Upstox from "./pages/Upstox";
-import TickerSearch from "./components/Ticker";
 import { NavbarMain } from "./common/header/Navbar_Main";
 // import SideNav from "./common/SideNav";
 import store from "./app/store";
@@ -35,7 +34,6 @@ const AppContent = () => {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/upstox" element={<Upstox />} />
-              <Route path="/ticker" element={<TickerSearch />} />
             </Routes>
           </main>
         </div>

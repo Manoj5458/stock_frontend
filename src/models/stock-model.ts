@@ -13,5 +13,5 @@ export default interface StockData {
     pe: String;
     netProfitQuarter: Array<String>;
     netProfitYear: Array<String>;
-    stockScore: Number;
+    stockScore: number;
 }
