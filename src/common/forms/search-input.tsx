@@ -23,7 +23,7 @@ export function SeachInput({
   useEffect(() => {
     onSearchChange("");
     onResultsChange([]);
-  }, []);
+  }, [onSearchChange, onResultsChange]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onSearchChange(e.target.value);

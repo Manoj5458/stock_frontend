@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.487.0",
     "motion": "^12.6.3",
     "react": "^18.2.0",

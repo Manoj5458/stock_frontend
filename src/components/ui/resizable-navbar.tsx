@@ -57,7 +57,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 100) {
-      setVisible(true);
+      setVisible(false);
     } else {
       setVisible(false);
     }
@@ -90,7 +90,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
           ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
           : "none",
         width: visible ? "40%" : "100%",
-        y: visible ? 20 : 0,
+        y: visible ? 10 : 0,
       }}
       transition={{
         type: "spring",
@@ -99,11 +99,10 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
       }}
       style={{
         minWidth: "800px",
-        
       }}
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-dark px-4 py-2 lg:flex dark:bg-black",
-        visible && "bg-neutral-950/80 dark:bg-primary/80",
+        visible && "bg-neutral-950/80 dark:bg-primary/80 top-[200px]",
         className
       )}
     >

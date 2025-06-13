@@ -5,6 +5,7 @@ import Icon from "@mdi/react";
 import { mdiInformationOutline } from "@mdi/js";
 import PerformanceSnapshot from "../charts/performanceSnapshot";
 import useReturnMetrics from "../../hooks/return-metrics";
+import Stocknews from "./stockNews";
 const ScreenerUi = () => {
   const screenerData = useSelector(marketData);
   const { dividendPershare, cagr, estimatedPrices } = useReturnMetrics();
@@ -117,7 +118,7 @@ const ScreenerUi = () => {
                 </div>
               </section>
 
-              <section className="custom-calc">
+              {/* <section className="custom-calc">
                 <h3 className="text-3xl mt-5 mb-2 font-bold">Calculate : </h3>
                 <span className="flex">
                   <Icon
@@ -127,8 +128,42 @@ const ScreenerUi = () => {
                   />
                   Calculate your potential returns based on your investment
                 </span>
+
+                <div className="grid grid-cols-4 gap-4">
+                  <div>
+                    <input
+                      type="number"
+                      value={investmentAmount}
+                      placeholder="Investment Amount"
+                      onChange={(e) =>
+                        setInvestmentAmount(Number(e.target.value))
+                      }
+                      className="w-full text-white bg-black p-2 border rounded-lg mt-2"
+                    />
+                  </div>
+                  <div className="flex items-center">
+                    <Icon path={mdiAlphaXCircleOutline} size={1} />
+                  </div>
+                  <div>
+                    <input
+                      type="number"
+                      value={investmentDuration}
+                      onChange={(e) =>
+                        setInvestmentDuration(Number(e.target.value))
+                      }
+                      placeholder="Investment Duration (Years)"
+                      className="w-full text-white
+                       bg-black p-2 border rounded-lg mt-2"
+                    />
+                  </div>
+                </div>
+              </section> */}
+
+              <section className="stock-news">
+                <div className="grid mt-5 gap-4 p-4 shadow-md rounded-lg border">
+                  <Stocknews symbol={screenerData["companyCode"]} />
+                </div>
               </section>
-              <div className="grid mt-5 gap-4 p-4 shadow-md rounded-lg border"></div>
             </div>
             <div className="ml-5 col-span-1">
               <PerformanceSnapshot stockScore={screenerData.stockScore} />

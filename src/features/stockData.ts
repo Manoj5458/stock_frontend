@@ -3,6 +3,7 @@ import StockData from "../models/stock-model";
 
 const initialState: StockData = {
     companyName: "",
+    companyCode: "",
     about: "",
     marketCap: "",
     currentPrice: "",

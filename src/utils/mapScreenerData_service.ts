@@ -4,6 +4,7 @@ const mapToStockData = (data: any): StockData => {
     const [high, low] = data["High / Low"].split(" / ");
     return {
         companyName: data["companyName"],
+        companyCode: data["companyCode"],
         about: data["about"],
         marketCap: data["Market Cap"],
         currentPrice: data["Current Price"],

@@ -1,5 +1,6 @@
 export default interface StockData {
     companyName: String;
+    companyCode: String;
     about: String;
     marketCap: String;
     currentPrice: String;
