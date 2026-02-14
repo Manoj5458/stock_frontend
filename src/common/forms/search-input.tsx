@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { PlaceholdersAndVanishInput } from "../../components/ui/placeholders-and-vanish-input";
 
-export function SeachInput({
+export function SearchInput({
   onSearchChange,
   onFormSubmit,
   onResultsChange,

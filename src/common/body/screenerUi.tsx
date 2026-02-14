@@ -67,6 +67,91 @@ const ScreenerUi = () => {
                 </div>
               </section>
 
+              <section className="relative-strength">
+                <h3 className="text-3xl mt-5 mb-2 font-bold">
+                  Relative Strength (IBD RS) :{" "}
+                </h3>
+                <span className="flex">
+                  <Icon
+                    path={mdiInformationOutline}
+                    size={1}
+                    className="mr-2"
+                  />
+                  IBD-style Relative Strength measures stock price performance
+                  over the past year. Higher RS indicates stronger momentum.
+                </span>
+                <div className="grid gap-4 p-4 shadow-md rounded-lg border mt-5">
+                  {screenerData.relativeStrength ? (
+                    <>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-lg">
+                          <b>RS Score :</b>{" "}
+                          <span
+                            className={`font-bold ${
+                              screenerData.relativeStrength >= 5
+                                ? "text-green-500"
+                                : screenerData.relativeStrength >= 4
+                                  ? "text-blue-500"
+                                  : screenerData.relativeStrength >= 3
+                                    ? "text-yellow-500"
+                                    : "text-red-500"
+                            }`}
+                          >
+                            {screenerData.relativeStrength.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className="text-lg">
+                          <b>Rating :</b>{" "}
+                          <span
+                            className={`font-semibold ${
+                              screenerData.rsRating?.includes("Excellent")
+                                ? "text-green-500"
+                                : screenerData.rsRating?.includes("Good")
+                                  ? "text-blue-500"
+                                  : screenerData.rsRating?.includes("Average")
+                                    ? "text-yellow-500"
+                                    : "text-red-500"
+                            }`}
+                          >
+                            {screenerData.rsRating}
+                          </span>
+                        </div>
+                      </div>
+                      {screenerData.rsDetails && (
+                        <div className="text-sm text-gray-400 mt-2">
+                          <b>Price History:</b>
+                          <div className="grid grid-cols-2 gap-2 mt-2">
+                            <div>
+                              Current: ₹{screenerData.rsDetails.current_price}
+                            </div>
+                            <div>
+                              63 days ago: ₹
+                              {screenerData.rsDetails.price_63_days_ago}
+                            </div>
+                            <div>
+                              126 days ago: ₹
+                              {screenerData.rsDetails.price_126_days_ago}
+                            </div>
+                            <div>
+                              189 days ago: ₹
+                              {screenerData.rsDetails.price_189_days_ago}
+                            </div>
+                            <div>
+                              252 days ago: ₹
+                              {screenerData.rsDetails.price_252_days_ago}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <div className="text-lg text-gray-400">
+                      Relative Strength data not available for this stock
+                    </div>
+                  )}
+                </div>
+              </section>
+
               <section className="return-metrics">
                 <h3 className="text-3xl mt-5 mb-2 font-bold">
                   Return Metrics :{" "}
@@ -111,7 +196,7 @@ const ScreenerUi = () => {
                                 }).format(value)
                               : "N/A"}
                           </span>
-                        )
+                        ),
                       )}
                     </div>
                   </div>

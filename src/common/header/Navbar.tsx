@@ -1,6 +1,8 @@
+import API_BASE_URL from "../../config/api";
+
 const Navbar = () => {
   const upstoxLogin = () => {
-    window.location.href = "http://localhost:8000/upstox/login";
+    window.location.href = `${API_BASE_URL}/upstox/login`;
   };
   return (
     <>

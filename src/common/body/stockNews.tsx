@@ -10,6 +10,7 @@ import {
 import StockNews from "@/src/models/stock-news-model";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import API_BASE_URL from "../../config/api";
 
 interface StocknewsProps {
   symbol: String;
@@ -22,7 +23,7 @@ const Stocknews = ({ symbol }: StocknewsProps) => {
     const fetchStockNews = async () => {
       try {
         const response = await axios.post(
-          "http://localhost:8000/finnhub/stock-news",
+          `${API_BASE_URL}/finnhub/stock-news`,
           { symbol: symbol },
           {
             method: "POST",

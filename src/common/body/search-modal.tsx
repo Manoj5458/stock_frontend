@@ -8,22 +8,23 @@ import {
   useModal,
 } from "../../components/ui/animated-modal";
 import { SignupFormDemo } from "./signUpForm";
-import { SeachInput } from "../forms/search-input";
+import { SearchInput } from "../forms/search-input";
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
-// import StockData from "@/src/models/stock-model";
+import API_BASE_URL from "../../config/api";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/src/app/store";
 import StockData from "@/src/models/stock-model";
 import { setStockData } from "../../features/stockData";
 import mapToStockData from "../../utils/mapScreenerData_service";
 import { useSearchParams } from "react-router-dom";
+// import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export function SearchModal() {
   const [results, setResults] = useState([]); // Search results
   const [searchValue, setSearchValue] = useState("");
   const [screenerData, setScreenerData] = useState<StockData>(); // Stock data
-  // const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY;
+  const API_KEY = process.env.REACT_APP_ALPHA_VANTAGE_API_KEY;
   const [csrfToken, setCsrfToken] = useState("");
   const dispatch = useDispatch<AppDispatch>();
   const { setOpen } = useModal();
@@ -33,24 +34,28 @@ export function SearchModal() {
     (val: string) => {
       setSearchParams({ q: val });
     },
-    [setSearchParams]
+    [setSearchParams],
   );
 
   // Fetch CSRF token from the server
   useEffect(() => {
-    setCsrfToken(
+    const token =
       document.cookie
         .split(";")
         .find((cookie) => cookie.trim().startsWith("csrftoken="))
-        ?.split("=")[1] || ""
-    );
-    console.log("CSRF Token:", csrfToken);
-  }, [csrfToken]);
+        ?.split("=")[1] || "";
+    setCsrfToken(token);
+    console.log("CSRF Token:", token);
+  }, []); // Empty dependency array - only run once on mount
 
   // keyboard event Trigger api call
   // useEffect(() => {
   //   const tickerSearch = async (searchValue: string) => {
   //     try {
+  //       if (!searchValue) {
+  //         setResults([]);
+  //         return;
+  //       }
   //       const response = await axios.get(`https://www.alphavantage.co/query`, {
   //         params: {
   //           function: "SYMBOL_SEARCH",
@@ -59,79 +64,68 @@ export function SearchModal() {
   //         },
   //       });
 
-  //       if (response.data.bestMatches) {
-  //         setResults(response.data.bestMatches);
+  //       if (response.data && Array.isArray(response.data.bestMatches)) {
+  //         const mapped = response.data.bestMatches.map((m: any) => ({
+  //           description: m["2. name"],
+  //           symbol: m["1. symbol"],
+  //           type: m["3. type"],
+  //         }));
+  //         setResults(mapped);
   //       } else {
   //         setResults([]);
   //       }
   //     } catch (err) {
-  //       throw new Error("Failed to fetch data. Try again later.");
+  //       setResults([]);
   //     } finally {
   //       // setLoading(false);
   //     }
   //   };
+
+  //   const tickerSearch = async (searchValue: string) => {
+  //     try {
+  //       const response = await axios.get(``)
+  //     }
   //   tickerSearch(searchValue);
   // }, [searchValue, API_KEY]);
-
-  // const searchTicker = async (event: React.FormEvent) => {
-  //   event.preventDefault();
-  //   if (!searchValue) return;
-  //   try {
-  //     const response = await axios.get(`https://www.alphavantage.co/query`, {
-  //       params: {
-  //         function: "SYMBOL_SEARCH",
-  //         keywords: searchValue,
-  //         apikey: API_KEY,
-  //       },
-  //     });
-
-  //     if (response.data.bestMatches) {
-  //       setResults(response.data.bestMatches);
-  //     } else {
-  //       setResults([]);
-  //     }
-  //     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  //   } catch (err) {
-  //     throw new Error("Failed to fetch data. Try again later.");
-  //   } finally {
-  //     console.log("Search completed");
-  //   }
-  // };
 
   const searchTicker = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!searchValue) return;
     try {
-      const response = await axios.post(
-        `http://localhost:8000/finnhub/search-symbol`,
-        {
-          searchValue: searchValue,
+      const response = await axios.get(`https://www.alphavantage.co/query`, {
+        params: {
+          function: "SYMBOL_SEARCH",
+          keywords: searchValue,
+          apikey: API_KEY,
         },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrfToken, // Include the CSRF token here
-          },
-        }
-      );
-      if (response.data.result) {
-        setResults(response.data.result);
-        console.log("Search results:", response.data.result);
+      });
+
+      if (response.data && Array.isArray(response.data.bestMatches)) {
+        const mapped = response.data.bestMatches.map((m: any) => ({
+          description: m["2. name"],
+          symbol: m["1. symbol"],
+          type: m["3. type"],
+        }));
+        setResults(mapped);
+      } else {
+        setResults([]);
       }
     } catch (err) {
-      console.error("Failed to fetch data. Try again later.");
+      setResults([]);
     } finally {
       console.log("Search completed");
     }
   };
 
+  // const searchTicker = async (event: React?
+
   const onTickerSearch = async (searchValue: string) => {
     const trimmedSearchValue = searchValue.replace(/\..*$/, "");
     updateSearchParams(trimmedSearchValue);
+    setOpen(false); // Close modal immediately
     try {
       const response = await axios.post(
-        `http://localhost:8000/upstox/screener`,
+        `${API_BASE_URL}/upstox/screener`,
         {
           searchValue: trimmedSearchValue,
         },
@@ -141,11 +135,10 @@ export function SearchModal() {
             "Content-Type": "application/json",
             "X-CSRFToken": csrfToken, // Include the CSRF token here
           },
-        }
+        },
       );
       if (response.data) {
         setScreenerData(response.data);
-        setOpen(false);
       }
     } catch (err) {
       console.error("Error fetching data:", err);
@@ -164,7 +157,7 @@ export function SearchModal() {
   //   async (searchValue: string) => {
   //     try {
   //       const response = await axios.post(
-  //         `http://localhost:8000/`,
+  //         `${API_BASE_URL}/`,
   //         {
   //           searchValue,
   //         },
@@ -185,9 +178,13 @@ export function SearchModal() {
   //   }
   // );
 
-  const handleSearchChange = (value: string) => {
+  const handleSearchChange = useCallback((value: string) => {
     setSearchValue(value);
-  };
+  }, []);
+
+  const handleResultsChange = useCallback((results: any) => {
+    setResults(results);
+  }, []);
 
   return (
     <div className="flex items-center justify-center">
@@ -199,9 +196,9 @@ export function SearchModal() {
           <ModalContent>
             <div className="flex flex-col gap-4">
               <div className="w-full flex items-center gap-2">
-                <SeachInput
+                <SearchInput
                   onSearchChange={handleSearchChange}
-                  onResultsChange={setResults}
+                  onResultsChange={handleResultsChange}
                   onFormSubmit={searchTicker}
                 />
               </div>
@@ -220,7 +217,7 @@ export function SearchModal() {
                         className="text-start hover:text-purple-600 hover:ps-1 w-full"
                         onClick={() => onTickerSearch(stock["symbol"])} // Call the function with the stock symbol
                       >
-                        <strong>{stock["description"]}</strong> -{" "}
+                        <strong>{stock["description"]}</strong> {stock["type"]}{" "}
                         {stock["symbol"]}{" "}
                       </button>
                     </li>

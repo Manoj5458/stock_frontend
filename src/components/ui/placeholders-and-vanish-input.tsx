@@ -155,7 +155,16 @@ export function PlaceholdersAndVanishInput({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !animating) {
+      e.preventDefault();
       vanishAndSubmit();
+      // Create a synthetic form event and call onSubmit
+      const syntheticEvent = {
+        ...e,
+        preventDefault: () => {},
+        currentTarget: e.currentTarget.closest("form") as HTMLFormElement,
+        target: e.currentTarget.closest("form") as HTMLFormElement,
+      } as React.FormEvent<HTMLFormElement>;
+      onSubmit && onSubmit(syntheticEvent);
     }
   };
 

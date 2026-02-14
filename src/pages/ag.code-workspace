@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../stock_backend_fastapi"
+		},
+		{
+			"path": "../../../myJunks"
+		}
+	]
+}

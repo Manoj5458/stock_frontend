@@ -13,6 +13,7 @@ import {
 
 import { useState } from "react";
 import { SearchModal } from "../body/search-modal";
+import API_BASE_URL from "../../config/api";
 
 export function NavbarMain() {
   const navItems = [
@@ -31,7 +32,7 @@ export function NavbarMain() {
   ];
 
   const upstoxLogin = () => {
-    window.location.href = "http://localhost:8000/upstox/login";
+    window.location.href = `${API_BASE_URL}/upstox/login`;
   };
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);

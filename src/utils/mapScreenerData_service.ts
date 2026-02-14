@@ -8,7 +8,7 @@ const mapToStockData = (data: any): StockData => {
         about: data["about"],
         marketCap: data["Market Cap"],
         currentPrice: data["Current Price"],
-        highPrice: high.trim(), // you could also keep both high and low if needed
+        highPrice: high.trim(),
         lowPrice: low.trim(),
         bookValue: data["Book Value"],
         dividendYield: data["Dividend Yield"],
@@ -19,6 +19,9 @@ const mapToStockData = (data: any): StockData => {
         netProfitQuarter: data["Net Profit Quarterly"],
         netProfitYear: data["Net Profit Yearly"],
         stockScore: data["stockScore"],
+        relativeStrength: data["Relative Strength"],
+        rsRating: data["RS Rating"],
+        rsDetails: data["RS Details"]
     };
 };
 

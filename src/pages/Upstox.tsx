@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import UpstoxProps from "../models/upstox-model";
+import API_BASE_URL from "../config/api";
 
 const Upstox = () => {
   const [responseData, setResponseData] = useState<UpstoxProps>({
@@ -28,7 +29,7 @@ const Upstox = () => {
   const accessToken = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8000/upstox/get_access_token",
+        `${API_BASE_URL}/upstox/get_access_token`,
         {
           method: "GET",
           headers: {

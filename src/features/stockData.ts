@@ -30,6 +30,9 @@ const stockDataSlice = createSlice({
         clearStockData: () => {
             return initialState;
         }
+    },
+    extraReducers: (builder) => {
+        // You can add extra reducers here if needed
     }
 });
 

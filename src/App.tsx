@@ -23,7 +23,7 @@ const AppContent = () => {
     <ModalProvider>
       <Router>
         <div>
-          <header>
+          <header> 
             <NavbarMain />
           </header>
           <main className="mt-14">
