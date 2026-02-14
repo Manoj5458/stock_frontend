@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { Card } from "../../components/shadcn/Card";
 import API_BASE_URL from "../../config/api";
@@ -32,6 +32,8 @@ const ComparisonTable = ({ companies }: ComparisonTableProps) => {
   const [comparisonData, setComparisonData] = useState<ComparisonData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploadFileName, setUploadFileName] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Default companies from your Excel file
   const defaultCompanies = [
@@ -84,6 +86,50 @@ const ComparisonTable = ({ companies }: ComparisonTableProps) => {
     fetchComparisonData();
   }, []);
 
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.name.endsWith(".csv") && !file.name.endsWith(".xlsx")) {
+      setError("Please upload a CSV or XLSX file");
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setUploadFileName(file.name);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await axios.post(
+        `${API_BASE_URL}/upstox/comparison/upload`,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      if (response.data && response.data.companies) {
+        setComparisonData(response.data.companies);
+      }
+    } catch (err: any) {
+      console.error("Error uploading CSV:", err);
+      const detail = err?.response?.data?.detail;
+      setError(detail || "Failed to process CSV file");
+    } finally {
+      setLoading(false);
+      // Reset file input so the same file can be re-uploaded
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+    }
+  };
+
   const formatNumber = (value: number | null | undefined) => {
     if (value === null || value === undefined) return "N/A";
     return value.toFixed(2);
@@ -108,7 +154,11 @@ const ComparisonTable = ({ companies }: ComparisonTableProps) => {
   if (loading) {
     return (
       <Card className="w-full p-6 bg-black">
-        <div className="text-center text-xl">Loading comparison data...</div>
+        <div className="text-center text-xl">
+          {uploadFileName
+            ? `Processing ${uploadFileName}... This may take a while for large files.`
+            : "Loading comparison data..."}
+        </div>
       </Card>
     );
   }
@@ -123,9 +173,45 @@ const ComparisonTable = ({ companies }: ComparisonTableProps) => {
 
   return (
     <Card className="w-full p-6 bg-black shadow-lg">
-      <h2 className="text-3xl font-bold mb-4 underline decoration-yellow-500">
-        Stock Comparison
-      </h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-3xl font-bold underline decoration-yellow-500">
+          Stock Comparison
+        </h2>
+
+        <div className="flex items-center gap-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".csv,.xlsx"
+            onChange={handleCsvUpload}
+            className="hidden"
+            id="csv-upload"
+          />
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition-colors flex items-center gap-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Upload CSV / XLSX
+          </button>
+          {uploadFileName && (
+            <span className="text-sm text-gray-400">
+              {uploadFileName} ({comparisonData.length} stocks)
+            </span>
+          )}
+        </div>
+      </div>
 
       <div className="overflow-x-auto">
         <table className="w-full text-sm border-collapse">
@@ -207,3 +293,4 @@ const ComparisonTable = ({ companies }: ComparisonTableProps) => {
 };
 
 export default ComparisonTable;
+
